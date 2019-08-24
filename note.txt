@@ -1,0 +1,69 @@
+========================================== Session & Cookie ==========================================
+Session: 
+	PHP Session cho phép lưu dữ liệu của người dùng trên server để sử dụng ở các lần sau(như username, thông tin đặt hàng..)
+	Các thông tin Session này chỉ là tạm thời và thường bị xóa đi ngay khi người dùng rời khỏi trang web đã dùng Session
+	Mỗi Session sẽ được cấp một định danh(ID) khác nhau và nội dung được lưu trong thư mục thiết lập trong file php.ini(tham
+		số session.save_path)
+		session.save_path="C:\xampp\tmp"
+		name|s:12:"Nguyen Van B";
+	Session hoạt động bằng cách tạo 1 chuỗi unique(UID) cho từng vister và chứa thông tin dựa trên ID đó
+	Mỗi trang PHP là 1 chương trình đang chạy trên máy chủ. Khi chương trình bắt đầu chạy, nó yêu cầu hệ điều hành của máy
+		chủ cấp cho nó 1 số bộ nhớ để lưu trữ các biến.
+	Khi trang được tải xong, hệ điều hành của máy chủ lấy bộ nhớ trở lại -> bộ nhớ của trang sẽ bị xóa -> tất cả các thông 
+		tin trên trang đều bị xóa
+	Dữ liệu được lưu vào bộ nhớ ở mỗi trang là độc lập với nhau(trang A không truy cập được bộ nhớ của các biến được tạo bởi
+		trang B)
+		-> Trên server có 1 phần bộ nhớ dùng chung đó là Share memmory
+	Thực hành:
+		Ghi giá trị của Session
+		Đọc giá trị của Session
+		Thay đổi lại giá trị của Session mà ta đã lưu trước đó
+		Kiểm tra 1 giá trị nào đó nó có tồn tại trong Session hay không
+		Xóa Session(trước khi xóa thì kiểm tra xem nó đã tồn tại hay chưa). Xóa thì thực hiện giống như xóa 1 phần tử của mảng
+			Muốn xóa tất cả các Session hiện có thì dùng session_destroy = session_unset()
+	Session có thể lưu trữ các giá trị gì:
+		Lưu biến vào Session
+		Lưu mảng vào Session
+		Lưu hàm(function) vào Session
+			Khi lưu hàm vào Session thì phải dùng eval() để thực thi hàm đó
+		Lưu file(nội dung tập tin) vào Session
+		Lưu hình ảnh vào Session
+			getimagesize(): Để lấy thông tin của phần tử
+			file_get_contents(): Lấy nội dung hình ảnh
+				Array
+				(
+						[0] => 284
+						[1] => 177
+						[2] => 2
+						[3] => width="284" height="177"
+						[bits] => 8
+						[channels] => 3
+						[mime] => image/jpeg
+				)
+				Dựa vào mime để hiển thị hình ảnh: header('Content-type: image/jpeg');
+		Lưu đối tượng vào Session
+	session_encode() chuyển đổi các nội dung được lưu trong Session thành 1 chuỗi đặc biệt
+	session_decode() phân tích chuỗi đặc biệt được chuyển đổi bởi hàm session_encode() và lưu vào Session -> Dùng để phục
+		hồi lại session
+	Luyện tập:
+		Tạo form đăng nhập đăng xuất, khi đăng nhập vào website thì sẽ dùng Session để lưu trữ lại nội dung đăng nhập, thiết 
+			lập thời gian xóa session
+		file_get_contents(): Trả về nội dung của file
+		file(): Chuyển nội dung của file sang thành Array và mỗi phần tử tương đương với mỗi dòng
+		Đối với phần file lưu thông tin người dùng:
+			john|E10ADC3949BA59ABBE56E057F20F883E|John Smith
+			peter|C33367701511B4F6020EC61DED352059|Peter Brown
+			mary|C33367701511B4F6020EC61DED352059|Mary Claure
+				Nếu lưu dạng này thì phải dùng foreach để duyệt rồi tìm theo giá trị của username -> gây ra chậm cho chương trình
+					do đó cách này không được tối ưu
+			Để hạn chế được điều này thì dùng file có cấu trúc:
+				john = "john|E10ADC3949BA59ABBE56E057F20F883E|John Smith"
+				peter = "peter|C33367701511B4F6020EC61DED352059|Peter Brown"
+				mary = "mary|C33367701511B4F6020EC61DED352059|Mary Claure"
+				-> Dùng parse_ini_file() để parse ra 1 Array
+		So sánh các giá trị username và password mà người dùng đã nhập vào, nếu mà nó có tồn tại thì tiến hành lưu vào Session,
+			nếu không tồn tại thì đưa người dùng quay trở lại trang login
+		Trên trang login dựa vào giá trị $_SESSION['flagPermission'] để biết được người dùng đã truy cập thành công hay chưa
+		Trên trang process kiểm tra giá trị $_SESSION['flagPermission'], nếu chưa tồn tại thì mới kiểm tra đến các biến $_POST
+			nếu đã tồn tại thì có nghĩa là người dùng đã đăng nhập thành công rồi và ko cần kiểm tra đến các biến $_POST
+		Gán timeout cho Session
