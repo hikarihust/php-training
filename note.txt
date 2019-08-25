@@ -87,3 +87,34 @@ So sánh cookie và session:
 	Cookie và session đều được sử dụng để lưu trữ dữ liệu. Tuy nhiên session được lưu tại server, cookie được lưu ở client
 	Session bị xóa khi người dùng đóng trình duyệt, cookie bị xóa khi thời gian tồn tại của nó kết thúc.
 	Session bảo mật hơn Cookie, cookie được lưu ở client nên nó có thể được chỉnh sửa bởi client
+
+========================================== Cache ==========================================
+Quá trình tiếp nhận và hiển thị nội dung trang web:
+  Người sử dụng gửi yêu cầu truy cập trang web
+  Server tiếp nhận, phân tích và xử lý yêu cầu. Nếu như các yêu cầu có đòi hỏi phần cơ sở dữ liệu thì server sẽ tiếp tục vào
+    cơ sở dữ liệu để truy xuất ra nội dung mà người dùng muốn hiển thị
+  Sau khi chuẩn bị sẵn các dữ liệu mà người dùng yêu cầu thì server sẽ chuyển dữ liệu về cho người sử dụng
+  -> Cơ bản thì việc tiếp nhận và hiển thị nội dung sẽ qua 3 bước. Trong đó thì ở bước 2 và 3 đòi hỏi server phải làm việc
+    rất nhiều. Đôi khi những yêu cầu truy vấn đến database do đó sẽ làm chậm đi tốc độ của website
+  Để hạn chế việc truy vấn database để website có thể thực thi nhanh đó là sử dụng Cache.
+  Cache được sử dụng như 1 trong nhiều giải pháp giúp tăng tốc độ của website(hạn chế việc truy cập vào cơ sở dữ liệu)
+  Các kiểu Cache:
+    Cache toàn bộ trang web
+    Cache từng phần của page
+    Cache câu lệnh SQL
+  Các hàm thao tác với Cache
+    ob_start(): Bật lên bộ nhớ đệm
+    ob_get_contents(): Lấy thông tin bộ nhớ đệm
+    ob_clean(): Xóa toàn bộ thông tin trong bộ nhớ đệm
+    ob_end_flush(): Tắt bộ nhớ đệm
+  Khi gọi đến hàm ob_start() thì bộ nhớ đệm sẽ được bật lên và nội dung của trang web nằm giữa ob_start() và ob_end_flush()
+    trước khi nó hiển thị lên thì nó sẽ được lưu vào trong bộ nhớ đệm
+  Ứng dụng:
+    Lưu trữ lại kết quả phần xử lý ít thay đổi vào file index.html, Do đó thay vì mất thời gian cho quá trình xử lý trong
+      index.php thì chỉ cần load lên file index.html lưu trữ nội dung cache lên là được
+    Ở đây thì dữ liệu được lưu vào file cache không phải lúc nào cũng cố định mà đôi khi nó sẽ thay đổi nhưng sự thay đổi
+      đó là không thường xuyên. Do đó cần phải có sự thay đổi thời gian mà chúng ta sử dụng file cache là bao lâu. 
+    filectime(): Lấy ra time của 1 file nào đó. Từ đó quy định các file cache hợp lệ là các file cache được tạo tại thời
+      điểm hiện tại không quá 1 khoảng time là bao nhiêu. Nếu nó hợp lệ thì chỉ cần đọc nội dung ở trong file cache ra là 
+      xong, nếu khi file cache chưa tồn tại thì tiến hành tạo ra nó
+      
