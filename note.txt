@@ -67,3 +67,23 @@ Session:
 		Trên trang process kiểm tra giá trị $_SESSION['flagPermission'], nếu chưa tồn tại thì mới kiểm tra đến các biến $_POST
 			nếu đã tồn tại thì có nghĩa là người dùng đã đăng nhập thành công rồi và ko cần kiểm tra đến các biến $_POST
 		Gán timeout cho Session
+Cookie:
+	PHP session và PHP cookie xét cho cùng đều được sử dụng để lưu trữ dữ liệu của người dùng
+	Đối với Session thì các dữ liệu này được lưu tại server, ngược lại đối với cookie các dữ liệu này được lưu trữ ngay tại 
+		trình duyệt web của người dùng
+	Mỗi browser quản lý và lưu trữ cookie theo cách riêng của nó, cho nên 2 browser cùng truy cập vào 1 website sẽ nhận được 
+		2 cookie khác nhau
+	Thao tác với cookie:
+		Tạo cookie
+		Truy cập cookie
+		Hủy cookie: 2 cách hủy
+			Khi muốn hủy 1 cookie thì chỉ cần set cookie đó mà ko truyền vào giá trị và timeout cho cookie đó
+			Set cookie với time ở quá khứ
+	Ứng dụng: Hiển thị thời gian cuối cùng truy cập vào trang web
+		Kiểm tra khi cookie lưu giá trị time truy cập cuối cùng đã tồn tại hay chưa, nếu chưa thì setcookie, và đã tồn tại rồi
+			thì cập nhật lại giá trị cookie
+
+So sánh cookie và session:
+	Cookie và session đều được sử dụng để lưu trữ dữ liệu. Tuy nhiên session được lưu tại server, cookie được lưu ở client
+	Session bị xóa khi người dùng đóng trình duyệt, cookie bị xóa khi thời gian tồn tại của nó kết thúc.
+	Session bảo mật hơn Cookie, cookie được lưu ở client nên nó có thể được chỉnh sửa bởi client
