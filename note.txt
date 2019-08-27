@@ -117,4 +117,19 @@ Quá trình tiếp nhận và hiển thị nội dung trang web:
     filectime(): Lấy ra time của 1 file nào đó. Từ đó quy định các file cache hợp lệ là các file cache được tạo tại thời
       điểm hiện tại không quá 1 khoảng time là bao nhiêu. Nếu nó hợp lệ thì chỉ cần đọc nội dung ở trong file cache ra là 
       xong, nếu khi file cache chưa tồn tại thì tiến hành tạo ra nó
-      
+
+========================================== Ajax ==========================================
+
+- Autocomplete: Khi gõ vào ô checkbox thì sẽ liệt kê ra danh sách các cuốn sách nằm ở trong Database, khi liệt kê ra thì
+  thực hiện gắn link cho nó. Đây là 1 chức năng thường thấy ở trong phần search. Khi click vào cuốn sách đó thì trang sẽ
+    được chuyển sang trang chi tiết về cuốn sách đó
+  Trong trường hợp có 1 danh sách quá dài thì không thể sử dụng SelectBox để liệt kê tất cả các giá trị trong database ra 
+    mà nên sử dụng Autocomplete
+  Trong trường hợp không gắn link cho các tiêu đề của các cuốn sách mà chỉ hiển thị các tiêu đề của các cuốn sách, khi nhấn
+    vào 1 tiêu đề nào đó thì tiêu đề đó sẽ nhẩy vào phía trong của ô input và đồng thời Id của cuốn sách đó sẽ được chuyển 
+    vào ô textbox ẩn. Nếu trong trường hợp này chúng ta sử dụng Form thì giá trị id này sẽ được chuyển sang trang sử lý
+  Giao diện:
+    1 ô input để nhập từ khóa tìm kiếm
+    1 ô input ẩn để đưa vào id khi sử dùng trường hợp cần id để Post qua 1 trang sử lý nào đó
+    1 thẻ để đưa vào giá trị của kết quả tìm kiếm
+    
