@@ -1,0 +1,37 @@
+#autocomplete {
+    padding: 3px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#autocomplete label {
+    font-size: 16px;
+    font-weight: bold
+}
+
+#autocomplete #keywords {
+    border: solid 1px #666;
+    padding: 3px;
+    width: 250px
+}
+
+#autocomplete .results {
+    border: 1px solid #ccc;
+    display: none
+}
+
+#autocomplete .results ul {
+    list-style: none inside;
+    margin: 10px
+}
+
+#autocomplete .results ul > li {
+    padding: 4px;
+    border-bottom: solid 1px #ccc;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.bg02 {
+    background-color: #CFC;
+    cursor: pointer;
+}

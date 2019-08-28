@@ -128,8 +128,42 @@ Quá trình tiếp nhận và hiển thị nội dung trang web:
   Trong trường hợp không gắn link cho các tiêu đề của các cuốn sách mà chỉ hiển thị các tiêu đề của các cuốn sách, khi nhấn
     vào 1 tiêu đề nào đó thì tiêu đề đó sẽ nhẩy vào phía trong của ô input và đồng thời Id của cuốn sách đó sẽ được chuyển 
     vào ô textbox ẩn. Nếu trong trường hợp này chúng ta sử dụng Form thì giá trị id này sẽ được chuyển sang trang sử lý
-  Giao diện:
-    1 ô input để nhập từ khóa tìm kiếm
-    1 ô input ẩn để đưa vào id khi sử dùng trường hợp cần id để Post qua 1 trang sử lý nào đó
-    1 thẻ để đưa vào giá trị của kết quả tìm kiếm
-    
+  Giao diện và thiết lập cho plugin:
+    1 ô input để nhập từ khóa tìm kiếm(keywords)
+      Có hiển gía trị mặc định ban đầu(text)
+    1 ô input ẩn để đưa vào id khi sử dùng trường hợp cần id để Post qua 1 trang sử lý nào đó(mID)
+    1 thẻ để đưa vào giá trị của kết quả tìm kiếm(results)
+    Định dạng cho giao diện
+    Box hiển thị kết quả ban đầu chưa có kết quả nên để ẩn đi, lúc nào có kết quả thì mới cho hiện nó lên
+    minChar: Khi nhập vào ô tìm kiếm thì số ký tự tối thiểu được thiết lập để số ký tự nhập vào bằng số ký tự này trở đi thì mới bắt đầu
+      tìm kiếm
+    records: Muốn hiển thị lên bao nhiêu kết quả khi tìm kiếm được trong database
+    linkType: Khi hiển thị lên danh sách kết quả thì có gắn link vào kết quả đó hay 
+    Khi hiển thị giá trị default(Enter keyword here...) vào trong ô input tìm kiếm thì kiểm tra trong ô đó có rỗng hay không
+    Khi click(focus, click) vào ô input tìm kiếm thì toàn bộ giá trị mặc định(Enter keyword here...) trong ô sẽ biến mất đồng thời loại bỏ đi
+      thuộc tính css cho input keywords khi hiển thị giá trị default, khi nhấn ra ngoài thì nó lại được hiển thị
+    Khi đã focus hoặc click vào ô input keywords rồi nhưng không đưa giá trị gì vào đó mà lại nhấn ra ngoài thì ô input đó vẫ phải hiển thị
+      câu thông báo(default) nằm trong input đó -> dùng đến sự kiện blur. Lúc này thì cần kiểm tra xem người dùng có nhập vào ô đó không,
+      nếu thì vẫn hiển thị lại giá trị đã nhập, còn không thì sẽ hiển thị lại giá trị default
+    setResultPosition(): Thiết lập lại chiều dài của ô results để cho nó vừa bằng với ô input nhập keywords mà thôi. Lúc này thì thẻ results này bị ảnh hưởng bởi
+      ô input keyword và cũng không thể biết trước được ô input keyword này dài bao nhiêu, định dạng vị trí dựa vào các giá trị offset() của ô
+      input keyword đó -> offset()
+      Khi thiết lập vị trí top và left cho ô results thì cần thiết lập 'position': 'absolute' cho nó
+    Khi hơ chuột lên các item kết quả tìm kiếm thì nó cần phải đổi màu, khi hơ lên nó thì cần hiển thị con trỏ chuột
+    Khi chiều dài của item quá dài thì cũng không thực hiện xuống hàng -> white-space: nowrap đồng thời không cho các ký tự vượt qua khỏi thẻ
+      div results bao bọc bên ngoài -> overflow: hidden
+      Trong trường họp này thì sẽ không thể hiển thị được hết đoạn text vào li này -> thêm thuộc tính title cho các thẻ li, khi hơ chuột lên
+        item này thì title sẽ được hiển thị
+	Cơ sở dữ liệu quan tâm đến bảng books với 4 trường đó là: id, name, status và order
+  Sự kiện chuột keyup: Khi nhấn phím xuống và nhả phím ra thì lúc đó sẽ thực hiện search
+    Khi nhả ,phím lên sẽ kiểm tra chiều dài của chuỗi ký tự được gõ vào ô keyword có lớn hơn giá trị minChar được thiết lập hay không, nếu có
+      thì tiến hành gọi Ajax
+    Khi gọi Ajax thì tiến hành gửi đi 2 dữ liệu là giá trị nhập vào ô keyword và số records cần lấy là bao nhiêu
+  listItem(): Tạo ra đoạn mã html để hiện thị kết quả, nếu kết quả Ajax trả về là rỗng thì hiển thị lên câu thông báo phù hợp, còn nếu có kết
+    quả thì hiển thị kết quả lấy được ra từ server
+  Khi hiển thị lên kết quả tìm kiếm thì khi mà hơ chuột lên các kết quả tìm kiếm thì tiến hành đổi màu cho nó
+  Trong trường hợp không gán link vào cho các item trong hộp hiển thị kết quả tìm kiếm thì khi nhấn vào từng item đó thì sẽ lấy được id của nó
+    và đưa vào ô input ẩn và đồng thời lấy ra giá trị title của item đó đưa vào ô input keywords, và đồng thời khi click chọn 1 item như vậy
+    thì ô kiển thị kết quả tìm kiếm cũng bị biến mất -> slideUp để tạo hiệu ứng ẩn
+  # Khi nhấn chuột lên màn hình(ko còn focus lên ô input keywords nữa) thì phần hiển thị results sẽ được ẩn đi -> slideUp để tạo hiệu ứng ẩn
+  Ban đầu ô results là ẩn, khi gõ 2 ký tự vào ô keywords thì records được hiển thị
