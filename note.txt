@@ -167,3 +167,19 @@ Quá trình tiếp nhận và hiển thị nội dung trang web:
     thì ô kiển thị kết quả tìm kiếm cũng bị biến mất -> slideUp để tạo hiệu ứng ẩn
   # Khi nhấn chuột lên màn hình(ko còn focus lên ô input keywords nữa) thì phần hiển thị results sẽ được ẩn đi -> slideUp để tạo hiệu ứng ẩn
   Ban đầu ô results là ẩn, khi gõ 2 ký tự vào ô keywords thì records được hiển thị
+
+- Paging: Phân trang bằng Ajax
+	Chức năng hiển thị lên các quyển sách
+	Chức năng phân trang này ngoài chức năng Next và Previous thì cho phép nhập vào số trang cần đến, nếu nhập vào ký tự nào đó ký tự ko phải 1 số
+	nguyên dương lớn hơn 0 và nhỏ hơn hoặc bằng số trang thì sẽ hiển lên câu thông báo giá trị không hợp nệ
+	Ngoài ra thì có làm thêm cả chức năng xóa. Khi đang ở trang cuối mà lần lượt xóa đi hết các phần tử ở trên trang đó thì tự động quay trở về
+	trang trước đó
+	Ngoài chức năng xóa thì có thể mở rộng thêm làm các chức năng như Active, Edit...
+	Giao diện:
+	1 thẻ div bao bọc tất cả phần phân trang
+	1 khối ul-li: Để hiển thị ra danh sách các cuốn sách. Trong các thẻ li có gắn thêm thuộc tính item-id chứa giá trị id của các cuốn sách. 
+		Trong li chứa tên của cuốn sách để hiển thị lên giao diện, 1 thẻ <a> để thực hiện chức năng xóa
+	1 khối ul-li: Là phần phân trang
+		Liệt kê trang hiện thời, tổng số trang -> li
+		Previous và Next
+		1 ô input để nhẩy đến trang mong muốn
