@@ -39,32 +39,32 @@
 				options.total = data.total;
 				pageInfo();
 				loadData();
-				
-				// Gán các sự kiện vào cho btnPrevious, btnNext, txtCurrentPage
-				setCurrentPage();
+			});
 
-				// Gán các sự kiện cho nút Next, Previous và sự kiện keyup khi nhập vào ô input số trang mà mình cần đến
-				btnPrevious.on('click', function(e){
-					goPrevious();
-					e.stopImmediatePropagation();
-				});
-				btnNext.on('click', function(e){
-					goNext();
-					e.stopImmediatePropagation();
-				});
-				txtCurrentPage.on('keyup', function(e){
-					if (e.keyCode === 13) {
-						var currentPageValue = $(this).val();
-						var reg = new RegExp('^[1-9]+$');
-						if (!reg.test(currentPageValue) || (parseInt(currentPageValue) > parseInt(options.total))) {
-							alert('Giá trị nhập vào không phù hợp');
-						} else {
-							options.currentPage = currentPageValue;
-							loadData();
-							pageInfo();
-						}
+			// Gán các sự kiện vào cho btnPrevious, btnNext, txtCurrentPage
+			setCurrentPage();
+
+			// Gán các sự kiện cho nút Next, Previous và sự kiện keyup khi nhập vào ô input số trang mà mình cần đến
+			btnPrevious.on('click', function(e){
+				goPrevious();
+				e.stopImmediatePropagation();
+			});
+			btnNext.on('click', function(e){
+				goNext();
+				e.stopImmediatePropagation();
+			});
+			txtCurrentPage.on('keyup', function(e){
+				if (e.keyCode === 13) {
+					var currentPageValue = $(this).val();
+					var reg = new RegExp('^[1-9]+$');
+					if (!reg.test(currentPageValue) || (parseInt(currentPageValue) > parseInt(options.total))) {
+						alert('Giá trị nhập vào không phù hợp');
+					} else {
+						options.currentPage = currentPageValue;
+						loadData();
+						pageInfo();
 					}
-				});
+				}
 			});
 		}
 
@@ -130,12 +130,7 @@
 					aRows = options.rows + ' li a';
 					$(aRows).on('click', function(e){
 						deleteItem(this);
-						e.stopImmediatePropagation();
 					});
-				} else {
-					var str = '<li> không có dữ liệu </li>';
-					rows.empty().append(str);
-					pages.hide();
 				}
 			});
 		}
@@ -145,36 +140,58 @@
 			var parent = $(obj).parent();
 			var itemId = $(parent).attr('item-id');
 			var lastId = $(rows).children(':last').attr('item-id');
+			// Ẩn và xóa phần tử <li> được nhấn
+			// $(parent).fadeOut({
+			// 	duration: 300,
+			// 	done:   function(){
+			// 		$(this).remove();
+			// 	}
+			// });
+
+			// $.ajax({
+			// 	url		: 'files/getdata.php?type=one&id=' + lastId,
+			// 	type	: 'GET',
+			// 	dataType: 'json'
+			// }).done(function(data){
+			// 	var str = '<li item-id="' + data.id + '">' + data.id + ' - ' + data.name + '<a href="#">Xóa</a>' + '</li>';
+			// 	str = $(str).hide().appendTo(rows);
+			// 	$(str).fadeIn(300);
+			// });
 
 			deleteFromRows(parent, itemId, lastId);
 		}
 
-		async function checkCurrentPage(itemId, lastId){
-			if ((itemId === lastId && $(rows).children().length === 1) && options.currentPage > 1) {
-				options.currentPage = options.currentPage - 1;
-			}
-
-			return;
-		};
 		// Ẩn rồi xóa phần tử <li> được nhấn
-		async function removeItem(itemId){
+		async function removeItem(parent, itemId, lastId){
 			$.ajax({
-				url		: 'files/getdata.php?type=delete&id=' + itemId + '&items=' + options.items,
+				url		: 'files/getdata.php?type=delete&id=' + itemId,
 				type	: 'GET',
 				dataType: 'json'
-			}).done(function(data){
-				options.total = data.total;
-				pageInfo();
 			});
-			
+
+			if ((itemId === lastId) && ($(rows).children().length === 1)) {
+				options.currentPage = options.currentPage - 1;
+			}
+			$(parent).fadeOut().remove();
+			init();
+
 			return;
 		};
 
 		async function deleteFromRows(parent, itemId, lastId){
-			await removeItem(itemId);
-			await checkCurrentPage(itemId, lastId);
-
-			init();
+			await removeItem(parent, itemId, lastId);
+			// Thêm 1 phần tử vào cuối
+			$.ajax({
+				url		: 'files/getdata.php?type=one&id=' + lastId,
+				type	: 'GET',
+				dataType: 'json'
+			}).done(function(data){
+				if (data) {
+					var str = '<li item-id="' + data.id + '">' + data.id + ' - ' + data.name + '<a href="#">Xóa</a>' + '</li>';
+					str = $(str).hide().appendTo(rows);
+					$(str).fadeIn();
+				}
+			});
 		};
 	}
 })(jQuery);

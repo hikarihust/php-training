@@ -23,21 +23,9 @@
              
              <div id="paging">
                  <ul id="rows">
-                     <li item-id='1'>
-                        1 - PHP and MySQL Web development
-                     </li>
-                     <li item-id='2'>
-                        2 - Easy PHP Websites with the Zend Framework
-                     </li>
-                     <li item-id='2'>
-                        3 - Head First PHP & MySQL
-                     </li>
-                     <li item-id='2'>
-                        4 - Murach's PHP and MySQL
-                     </li>
                  </ul>
                  <ul id="pages">
-                 	 <li class="pageInfo">Page 1 of 6</li>
+                 	 <li class="pageInfo"></li>
                      <li class="goPrevious">&lsaquo;&lsaquo; Previous</li>
                      <li>
                      	<input type="text" class="currentPage" id="currentPage" value=""/>

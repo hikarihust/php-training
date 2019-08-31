@@ -12,8 +12,13 @@
 
 #paging #rows li{
 	padding: 5px 10px;
+	height: 15px;
 	border-bottom: solid 1px #ccc;
 	font-weight: bold;
+}
+
+#paging #rows li:last-child{
+	border-bottom: 0px;
 }
 
 #paging #rows a{
@@ -42,7 +47,7 @@
 	border: solid 1px #ccc;
 	float: left;
 	margin-left: 5px;
-	
+	padding: 1px
 }
 
 #pages li.goPrevious, li.goNext{

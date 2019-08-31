@@ -170,7 +170,7 @@ Quá trình tiếp nhận và hiển thị nội dung trang web:
 
 - Paging: Phân trang bằng Ajax
 	Chức năng hiển thị lên các quyển sách
-	Chức năng phân trang này ngoài chức năng Next và Previous thì cho phép nhập vào số trang cần đến, nếu nhập vào ký tự nào đó ký tự ko phải 1 số
+	Chức năng phân trang này ngoài chức năng Next và Previous thì cho phép nhập vào số trang cần đến sau khi nhấn Enter, nếu nhập vào ký tự nào đó ký tự ko phải 1 số
 	nguyên dương lớn hơn 0 và nhỏ hơn hoặc bằng số trang thì sẽ hiển lên câu thông báo giá trị không hợp nệ
 	Ngoài ra thì có làm thêm cả chức năng xóa. Khi đang ở trang cuối mà lần lượt xóa đi hết các phần tử ở trên trang đó thì tự động quay trở về
 	trang trước đó
@@ -183,3 +183,50 @@ Quá trình tiếp nhận và hiển thị nội dung trang web:
 		Liệt kê trang hiện thời, tổng số trang -> li
 		Previous và Next
 		1 ô input để nhẩy đến trang mong muốn
+	items: Khai báo số item hiển thị trên 1 trang
+	height: Chiều cao của 1 phần tử, từ đó nhân với số phần tử có trên 1 trang để biết được chiều cao của phần tử chứa các phần tử bao bọc 
+		bên ngoài
+	currentPage: Hiển thị trang hiện tại, mặc định ban đầu khi vào trang thì hiển thị trang đầu tiên
+	total: Tổng số trang, khi phân trang thì cần biết tổng số trang và số phần tử có trên 1 trang để từ đó tính được ra số trang có là bao nhiêu,
+		vì có thể là ko có dữ liệu nên mặc định thiết lập total = 0 
+	init(): Hàm khởi động, hàm này sẽ được chạy khi gọi plugin lên
+		Lấy tổng số trang, truy vấn vào trong database và tính được tổng số trang của phần phân trang
+		Gán các sự kiện vào cho btnPrevious, btnNext, txtCurrentPage
+		function goPrevious() {
+    goPrevious(): Hàm xử lý khi nhấn vào nút btnPrevious
+		function goNext() {
+	goNext(): Hàm xử khi khi nhấn vào nút Next
+	setCurrentPage(): Hàm gán giá trị của trang hiện thời vào ô input currentPage
+	pageInfo(): Hàm hiển thị thông tin phân trang, đưa thông tin trang số mấy trong tổng số trang
+	loadData(): Load những thông tin cần thiết đưa vào trong thẻ ul. Khi load data thì cần xác định xem sẽ load dữ liệu trang số mấy,
+		mặc định ban đầu là load ra trang đầu tiên
+	deleteItem(): Xóa đí 1 dòng trên giao diện
+	setRowsHeight(): Thiết lập chiều cao của ul. Để thực hiện điều này thì cần xác định được trong ul đó hiển thị bao nhiêu dòng
+	Việc đầu tiên cần phải làm là lấy được tổng số trang ở trong database
+	getdata.php: Sử dụng cho các thao tác với dữ liệu của MySQL nên cần phân biệt được khi nào lấy tổng số trang, khi nào load các thông tin ra
+    và khi nào thì xóa trang
+    Đếm tổng số trang: cần gửi đi số phần tử trên 1 trang là bao nhiêu, ở hàm init() sau khi lấy được tổng số trang thì gắn nó vào options của
+      plugin
+	Đối với ô input nhập vào giá trị số trang thì sau khi nhập giá trị rồi nhấn Enter thì mới thực hiện nhảy đến trang, do đó cần phải kiểm tra
+    keycode khi bắt sự kiện keyup, keycode của phím Enter có giá trị là 13. Rồi kiểm tra giá trị nhập vào nếu thỏa mãn thì nhảy đến trang đó
+    Giá trị nhập vào này phải là 1 số nguyên dương và không được lớn hơn tổng số trang
+    Khi giá trị nhập vào đúng thì thực hiện load data để load thông tin của trang đó
+	Sử dụng Ajax để load các quyển sách
+		cache     : false -> để cho nó chạy tốt ở trên trình duyệt IE
+		rows.empty(): Làm rỗng selector
+		Thiết lập chiều cao cho thẻ ul#rows chứa danh sách các quyển sách 
+		rows.append(str): Thêm phần tử mới vào cuối selector
+		Mỗi phần tử li hiển thị thông tin của các cuốn sách này được gắn thêm 1 thuộc tính nữa đó là item-id, để khi xóa 1 cuốn sách nào đó thì
+			sẽ dựa vào giá trị này
+    Khi nhấn vào nút Previous thì thực hiện load lại thông tin -> load lại phần hiển thị list sách, thông tin phân trang và giá trị hiển thị
+      trang hiện tại trong ô input
+  Khi thực hiện xóa đi 1 phần tử thì sẽ có nhiều vấn đề:
+    Sau khi xóa đi 1 phần tử trên trang thì thực hiện xóa dữ liệu trong database và ẩn đi phần tử đó bằng hiệu ứng ẩn đi dần dần bằng fadeOut
+      rồi remove phần tử li đó đi(thay cho việc load lại danh sách) ->remove(). Rồi load thêm 1 phần tử vào cuối trang hiện tại ->
+      Tiếp tục sử dụng Ajax để lấy ra phần tử kế tiếp và đưa vào vị trí cuối cùng ở trong trang đó. Để thực hiện được điều này thì cần phải lấy 
+        ra được id của phần tử cuối cùng của trang đó là bao nhiêu -> children(':last')
+      appendTo(): Phần 1 phần tử vào cuối phần tử đích
+  Khi xóa đi 1 phần tử, trong trường hợp đang ở trang cuối cùng, xóa đi hết các phần tử của trang đó đi -> lúc này xóa xong thì toàn bộ trang 
+    cuối sẽ không còn nữa nên phải chuyển về trang trước đó
+  Vấn đè gặp phải khi nhấn nút Next và Previous. Khi nhấn nút thì có 2 sự kiện cùng xảy ra cùng 1 lúc, lúc này chỉ muốn nó xảy ra sự kiện đầu
+    tiên thôi -> e.stopImmediatePropagation();
