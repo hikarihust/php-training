@@ -243,3 +243,10 @@ In this tutorial I will talk about :
 - the main issue for websites that do not use lazy loading
 - how to transform your website so it can lazy load images and videos
 - how to create your own observer using Intersection Observer API 
+
+==========================================================================================
+							Export MySQL Data To CSV File
+
+In this tutorial you will learn two methods. 
+In the first method I will show you the easy method to export MySQL table data to CSV file using PHP only (for small databases).
+In the second method you will learn how to export MySQL table data of ANY size by using jQuery & Ajax & PHP & MySQL. 
